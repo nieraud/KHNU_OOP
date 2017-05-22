@@ -1,8 +1,8 @@
 package com.nie.todos;
 
 import com.nie.todos.utils.exceptions.ExceptionService;
-import com.nie.todos.utils.routing.Router;
-import com.nie.todos.utils.routing.Routing;
+import com.nie.todos.controllers.todosCtrl.TodosRouter;
+import com.nie.todos.controllers.Routing;
 
 /**
  * Created by inna on 20.05.17.
@@ -10,7 +10,7 @@ import com.nie.todos.utils.routing.Routing;
 public class FacadeStarter {
 
     static void start(){
-       // startExceptionService();
+        startExceptionService();
         startRoutingService();
     }
 
@@ -20,7 +20,7 @@ public class FacadeStarter {
     }
 
     private static void startRoutingService() {
-        Routing route = new Router();
+        Routing route = new TodosRouter();
         route.init();
     }
 }

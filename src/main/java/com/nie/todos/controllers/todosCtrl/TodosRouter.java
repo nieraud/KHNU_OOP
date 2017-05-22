@@ -1,5 +1,6 @@
-package com.nie.todos.utils.routing;
+package com.nie.todos.controllers.todosCtrl;
 
+import com.nie.todos.controllers.Routing;
 import com.nie.todos.utils.status.Status;
 import com.nie.todos.models.factory.DaoServiceFactory;
 import com.nie.todos.models.repositories.TodosRepository;
@@ -16,7 +17,7 @@ import static spark.Spark.*;
 /**
  * Created by inna on 20.05.17.
  */
-public class Router implements Routing {
+public class TodosRouter implements Routing {
 
     private static final TodosRepository todosService = DaoServiceFactory.getTodosService();
 
@@ -28,42 +29,42 @@ public class Router implements Routing {
         port(9999);
 
         // Render main UI
-        get("/", (req, res) -> renderTodosCustom(req));
+        get("/", (req, res) -> renderTodos(req));
 
         // Add new
         post("/todos", (req, res) -> {
             todosService.add(req.queryParams("todo-title"));
-            return renderTodosCustom(req);
+            return renderTodos(req);
         });
 
         // Remove all completed
         delete("/todos/completed", (req, res) -> {
             todosService.removeCompleted();
-            return renderTodosCustom(req);
+            return renderTodos(req);
         });
 
         // Toggle all status
         put("/todos/toggle_status", (req, res) -> {
             todosService.toggleAll(req.queryParams("toggle-all") != null);
-            return renderTodosCustom(req);
+            return renderTodos(req);
         });
 
         // Remove by id
         delete("/todos/:uniqueid", (req, res) -> {
             todosService.remove(req.params("uniqueid"));
-            return renderTodosCustom(req);
+            return renderTodos(req);
         });
 
         // Update by id
         put("/todos/:uniqueid", (req, res) -> {
             todosService.update(req.params("uniqueid"), req.queryParams("todo-title"));
-            return renderTodosCustom(req);
+            return renderTodos(req);
         });
 
         // Toggle status by id
         put("/todos/:uniqueid/toggle_status", (req, res) -> {
             todosService.toggleStatus(req.params("uniqueid"));
-            return renderTodosCustom(req);
+            return renderTodos(req);
         });
 
         // Edit by id
@@ -77,7 +78,7 @@ public class Router implements Routing {
         }});
     }
 
-    private static String renderTodosCustom(Request req) {
+    private static String renderTodos(Request req) {
         String statusStr = req.queryParams("status");
 
         Map<String, Object> model = new HashMap<>();
@@ -97,4 +98,6 @@ public class Router implements Routing {
     private static String renderTemplate(String template, Map model) {
         return new VelocityTemplateEngine().render(new ModelAndView(model, template));
     }
+
+
 }
