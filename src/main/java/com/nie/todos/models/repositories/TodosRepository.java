@@ -1,6 +1,6 @@
 package com.nie.todos.models.repositories;
 
-import com.nie.todos.models.Status;
+import com.nie.todos.utils.status.Status;
 import com.nie.todos.models.pojos.entities.Todos;
 import org.sql2o.Sql2oException;
 

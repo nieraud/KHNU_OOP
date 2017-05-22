@@ -1,5 +1,7 @@
 package com.nie.todos.utils.exceptions;
 
+import org.sql2o.Sql2oException;
+
 import static spark.Spark.exception;
 
 /**
@@ -9,6 +11,14 @@ public class ExceptionService {
     public void init(){
 
         exception(Exception.class, (exception, request, response) -> {
+            exception.printStackTrace();
+        });
+
+        exception(Sql2oException.class, (exception, request, response) -> {
+            exception.printStackTrace();
+        });
+
+        exception(NullPointerException.class, (exception, request, response) ->{
             exception.printStackTrace();
         });
 

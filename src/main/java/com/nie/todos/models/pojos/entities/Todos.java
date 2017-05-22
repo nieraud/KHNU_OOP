@@ -1,6 +1,6 @@
 package com.nie.todos.models.pojos.entities;
 
-import com.nie.todos.models.Status;
+import com.nie.todos.utils.status.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,13 +15,5 @@ public class Todos {
     private UUID uniqueid;
     private String title;
     private Status status;
-
-    public void toggleStatus() {
-        this.status = isComplete() ? Status.ACTIVE : Status.COMPLETE;
-    }
-
-    public boolean isComplete() {
-        return this.status == Status.COMPLETE;
-    }
 
 }

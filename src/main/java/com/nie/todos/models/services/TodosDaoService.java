@@ -1,8 +1,6 @@
 package com.nie.todos.models.services;
 
-import com.nie.todos.models.Status;
-import com.nie.todos.models.Todo;
-import com.nie.todos.models.TodoDao;
+import com.nie.todos.utils.status.Status;
 import com.nie.todos.models.factory.AbstractDaoFactory;
 import com.nie.todos.models.pojos.entities.Todos;
 import com.nie.todos.models.repositories.TodosRepository;

@@ -1,4 +1,4 @@
-package com.nie.todos.models;
+package com.nie.todos.utils.status;
 
 public enum Status {
     ACTIVE,
