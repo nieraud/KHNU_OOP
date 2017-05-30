@@ -10,7 +10,7 @@ import com.nie.todos.utils.routing.Routing;
 public class FacadeStarter {
 
     static void start(){
-       // startExceptionService();
+        startExceptionService();
         startRoutingService();
     }
 

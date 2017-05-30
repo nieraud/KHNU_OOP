@@ -13,6 +13,7 @@
                 <div class="view">
                     <input type="checkbox" class="toggle" ic-put-to="/todos/$todo.id/toggle_status" #if($todo.status == 'COMPLETE')checked#end>
                     <label ic-get-from="/todos/$todo.id/edit" ic-target="closest li" ic-trigger-on="dblclick" ic-replace-target="true">$todo.title</label>
+                    <div style="font-size: 10px; padding-left: 10px">$todo.dateadded</div>
                     <button class="destroy" ic-delete-from="/todos/$todo.id"></button>
                 </div>
             </li>

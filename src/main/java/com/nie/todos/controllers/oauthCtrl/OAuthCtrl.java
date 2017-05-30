@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static spark.Spark.redirect;
+
 /**
  * Created by inna on 29.05.17.
  */
@@ -70,4 +72,11 @@ public class OAuthCtrl {
         return TodosCtrl.renderTodos(request);
     };
 
+    @Getter
+    private static final Route exit = (request, response) -> {
+        request.session().removeAttribute("iduser");
+        response.redirect("/starter.html");
+
+        return "";
+    };
 }

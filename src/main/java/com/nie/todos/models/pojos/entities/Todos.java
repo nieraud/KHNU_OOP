@@ -4,6 +4,7 @@ import com.nie.todos.utils.status.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 
@@ -16,7 +17,6 @@ public class Todos {
     private String title;
     private String id;
     private Status status;
-    private Timestamp dateadded;
+    private Date dateadded;
     private String iduser;
-
 }

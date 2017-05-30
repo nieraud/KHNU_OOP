@@ -26,7 +26,6 @@ public class TodosCtrl {
 
     @Getter
     private static final Route addNew = (request, response) -> {
-        System.out.println(request.session().attribute("iduser").toString());
         todosService.add(request.queryParams("todo-title"),
                 request.session().attribute("iduser").toString());
         return renderTodos(request);

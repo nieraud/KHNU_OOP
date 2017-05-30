@@ -113,7 +113,7 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
 
     @Override
     public void update(String id, String title, String iduser) {
-        String sql = "UPDATE todos SET title = :title WHERE id = :id AND iduser = :iduser;";
+        String sql = "UPDATE todos SET (title, dateadded) = (:title, DEFAULT) WHERE id = :id AND iduser = :iduser;";
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)

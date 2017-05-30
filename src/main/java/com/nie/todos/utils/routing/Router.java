@@ -13,7 +13,7 @@ public class Router implements Routing {
     @Override
     public void init() {
 
-        exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
+        //exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
         staticFiles.location("/public");
         port(8080);
 
@@ -49,6 +49,9 @@ public class Router implements Routing {
 
         // Edit by id
         get("/todos/:id/edit", TodosCtrl.getEditById());
+
+        //Exit
+        get("/exit", OAuthCtrl.getExit());
 
     }
 }
