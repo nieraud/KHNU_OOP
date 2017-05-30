@@ -10,6 +10,7 @@ import java.util.List;
  * Created by inna on 20.05.17.
  */
 public interface TodosRepository {
+
     void add(String newTodos) throws Sql2oException;
 
     List<Todos> getAll();
@@ -22,9 +23,9 @@ public interface TodosRepository {
 
     void remove(String id);
 
-   Todos find(String id);
+    Todos find(String id);
 
-    public void toggleAll(boolean complete);
+    void toggleAll(boolean complete);
 
     void update(String id, String title);
 

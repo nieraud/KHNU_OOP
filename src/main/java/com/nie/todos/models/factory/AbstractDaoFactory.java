@@ -1,6 +1,8 @@
 package com.nie.todos.models.factory;
 
+import com.nie.todos.models.repositories.OAuthRepository;
 import com.nie.todos.models.repositories.TodosRepository;
+import com.nie.todos.models.services.OAuthDaoService;
 import com.nie.todos.models.services.TodosDaoService;
 
 /**
@@ -14,6 +16,9 @@ public abstract class AbstractDaoFactory implements DataSource {
 
         static final TodosRepository TODOS_REPOSITORY
                 = new TodosDaoService(getInstance());
+
+        static final OAuthRepository OAUTH_REPOSITORY
+                = new OAuthDaoService(getInstance());
 
 
     }

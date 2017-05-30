@@ -357,3 +357,8 @@ footer:before {
         bottom: 10px;
     }
 }
+
+.custom {
+    color: #d9d9d9;
+    text-decoration: line-through;
+}
