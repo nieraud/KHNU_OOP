@@ -20,14 +20,15 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
     }
 
     @Override
-    public void add(String newTodos) throws Sql2oException {
-        String sql = "INSERT INTO todos VALUES(:id, :title, 'ACTIVE');";
+    public void add(String newTodos, String iduser) throws Sql2oException {
+        String sql = "INSERT INTO todos VALUES(:id, :title, 'ACTIVE', DEFAULT, :iduser);";
         String id = UUID.randomUUID().toString();
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)
                     .addParameter("id",id)
                     .addParameter("title", newTodos)
+                    .addParameter("iduser", iduser)
                     .executeUpdate();
         } catch (Sql2oException e) {
             throw new Sql2oException(e);
@@ -47,22 +48,36 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
     }
 
     @Override
-    public List<Todos> ofStatus(String statusString) {
-        return (statusString == null || statusString.isEmpty()) ? getAll() : ofStatus(Status.valueOf(statusString.toUpperCase()));
+    public List<Todos> getAllByUserId(String iduser) {
+        String sql = "SELECT * FROM todos WHERE iduser = :iduser;";
+
+        try (Connection connection = daoFactory.getDataSource().open()) {
+            return connection.createQuery(sql)
+                    .addParameter("iduser", iduser)
+                    .executeAndFetch(Todos.class);
+        } catch (Sql2oException e) {
+            throw new Sql2oException(e);
+        }
     }
 
     @Override
-    public List<Todos> ofStatus(Status status) {
-        return getAll().stream().filter(t -> t.getStatus().equals(status)).collect(Collectors.toList());
+    public List<Todos> ofStatus(String statusString, String iduser) {
+        return (statusString == null || statusString.isEmpty()) ? getAllByUserId(iduser) : ofStatus(Status.valueOf(statusString.toUpperCase()), iduser);
     }
 
     @Override
-    public void removeCompleted() {
-        String sql = "DELETE FROM todos WHERE status = :status;";
+    public List<Todos> ofStatus(Status status, String iduser) {
+        return getAllByUserId(iduser).stream().filter(t -> t.getStatus().equals(status)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeCompleted(String iduser) {
+        String sql = "DELETE FROM todos WHERE status = :status AND iduser = :iduser;";
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)
                     .addParameter("status", Status.COMPLETE)
+                    .addParameter("iduser", iduser)
                     .executeUpdate();
         } catch (Sql2oException e) {
             throw new Sql2oException(e);
@@ -70,12 +85,13 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
     }
 
     @Override
-    public void remove(String id) {
-        String sql = "DELETE FROM todos WHERE id = :id;";
+    public void remove(String id, String iduser) {
+        String sql = "DELETE FROM todos WHERE id = :id AND iduser = :iduser;";
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)
                     .addParameter("id", id)
+                    .addParameter("iduser", iduser)
                     .executeUpdate();
         } catch (Sql2oException e) {
             throw new Sql2oException(e);
@@ -96,13 +112,14 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
     }
 
     @Override
-    public void update(String id, String title) {
-        String sql = "UPDATE todos SET title = :title WHERE id = :id;";
+    public void update(String id, String title, String iduser) {
+        String sql = "UPDATE todos SET title = :title WHERE id = :id AND iduser = :iduser;";
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)
                     .addParameter("title", title)
                     .addParameter("id", id)
+                    .addParameter("iduser", iduser)
                     .executeUpdate();
         } catch (Sql2oException e) {
             throw new Sql2oException(e);
@@ -110,13 +127,14 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
     }
 
     @Override
-    public void toggleStatus(String id){
-        String sql = "UPDATE todos SET status = :status WHERE id = :id;";
+    public void toggleStatus(String id, String iduser){
+        String sql = "UPDATE todos SET status = :status WHERE id = :id AND iduser=:iduser;";
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)
                     .addParameter("status", isComplete(find(id)))
                     .addParameter("id", id)
+                    .addParameter("iduser",iduser)
                     .executeUpdate();
 
         } catch (Sql2oException e) {
@@ -133,12 +151,13 @@ public class TodosDaoService extends AbstractDaoService implements TodosReposito
     }
 
     @Override
-    public void toggleAll(boolean complete) {
-        String sql = "UPDATE todos SET status = :status;";
+    public void toggleAll(boolean complete, String iduser) {
+        String sql = "UPDATE todos SET status = :status WHERE iduser = :iduser;";
 
         try (Connection connection = daoFactory.getDataSource().open()) {
             connection.createQuery(sql)
                     .addParameter("status", complete ? Status.COMPLETE : Status.ACTIVE)
+                    .addParameter("iduser", iduser)
                     .executeUpdate();
         } catch (Sql2oException e) {
             throw new Sql2oException(e);

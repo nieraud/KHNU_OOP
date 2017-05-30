@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.nie.todos.controllers.todosCtrl.TodosCtrl;
 import com.nie.todos.models.factory.DaoServiceFactory;
 import com.nie.todos.models.pojos.dtos.userDTO.googleDTO.UserGoogle;
+import com.nie.todos.models.pojos.entities.User;
 import com.nie.todos.models.repositories.OAuthRepository;
 import lombok.Getter;
 import spark.Route;
@@ -61,8 +62,10 @@ public class OAuthCtrl {
         final Response responseURL = service.execute(requestURL);
 
         UserGoogle user = gson.fromJson(responseURL.getBody(), UserGoogle.class);
-        if (!oAuthService.isExistUserWithToken(user.getEtag()))
-            oAuthService.auth(user, user.getEtag());
+
+        if (!oAuthService.isExistUserWithToken(user.getEtag())) {
+            request.session().attribute("iduser", oAuthService.auth(user, user.getEtag()));
+        }else request.session().attribute("iduser", oAuthService.getUserByToken(user.getEtag()).getId());
 
         return TodosCtrl.renderTodos(request);
     };

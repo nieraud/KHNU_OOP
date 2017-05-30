@@ -26,37 +26,44 @@ public class TodosCtrl {
 
     @Getter
     private static final Route addNew = (request, response) -> {
-        todosService.add(request.queryParams("todo-title"));
+        System.out.println(request.session().attribute("iduser").toString());
+        todosService.add(request.queryParams("todo-title"),
+                request.session().attribute("iduser").toString());
         return renderTodos(request);
     };
 
     @Getter
     private static final Route removeAllCompl = (request, response) -> {
-        todosService.removeCompleted();
+        todosService.removeCompleted(request.session().attribute("iduser").toString());
         return renderTodos(request);
     };
 
     @Getter
     private static final Route toggleAllStatus = (request, response) -> {
-        todosService.toggleAll(request.queryParams("toggle-all") != null);
+        todosService.toggleAll(request.queryParams("toggle-all") != null,
+                request.session().attribute("iduser").toString());
         return renderTodos(request);
     };
 
     @Getter
     private static final Route removeById = (request, response) -> {
-        todosService.remove(request.params("id"));
+        todosService.remove(request.params("id"),
+                request.session().attribute("iduser").toString());
         return renderTodos(request);
     };
 
     @Getter
     private static final Route updateById = (request, response) -> {
-        todosService.update(request.params("id"), request.queryParams("todo-title"));
+        todosService.update(request.params("id"),
+                request.queryParams("todo-title"),
+                request.session().attribute("iduser").toString());
         return renderTodos(request);
     };
 
     @Getter
     private static final Route toggleStatusById = (request, response) -> {
-        todosService.toggleStatus(request.params("id"));
+        todosService.toggleStatus(request.params("id"),
+                request.session().attribute("iduser").toString());
         return renderTodos(request);
     };
 
@@ -67,8 +74,8 @@ public class TodosCtrl {
 
     public static String renderTodos(Request req) {
         String statusStr = req.queryParams("status");
-        List<Todos> list = todosService.ofStatus(statusStr);
-        int sizeActive = todosService.ofStatus(Status.ACTIVE).size();
+        List<Todos> list = todosService.ofStatus(statusStr, req.session().attribute("iduser").toString());
+        int sizeActive = todosService.ofStatus(Status.ACTIVE, req.session().attribute("iduser").toString()).size();
 
         Map<String, Object> model = new HashMap<>();
         model.put("todos", list);

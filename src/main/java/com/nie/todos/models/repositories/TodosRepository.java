@@ -11,23 +11,25 @@ import java.util.List;
  */
 public interface TodosRepository {
 
-    void add(String newTodos) throws Sql2oException;
+    void add(String newTodos, String iduser) throws Sql2oException;
 
     List<Todos> getAll();
 
-    List<Todos> ofStatus(String statusString);
+    List<Todos> getAllByUserId(String iduser);
 
-    List<Todos> ofStatus(Status status);
+    List<Todos> ofStatus(String statusString, String iduser);
 
-    void removeCompleted();
+    List<Todos> ofStatus(Status status, String iduser);
 
-    void remove(String id);
+    void removeCompleted(String iduser);
+
+    void remove(String id, String iduser);
 
     Todos find(String id);
 
-    void toggleAll(boolean complete);
+    void toggleAll(boolean complete, String iduser);
 
-    void update(String id, String title);
+    void update(String id, String title, String iduser);
 
-    void toggleStatus(String id) throws Exception;
+    void toggleStatus(String id, String iduser) throws Exception;
 }
